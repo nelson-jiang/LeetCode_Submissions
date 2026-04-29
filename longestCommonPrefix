@@ -1,0 +1,38 @@
+class Solution {                                                                 // Define the LeetCode Solution class
+public:                                                                          // Start the public section
+    string longestCommonPrefix(vector<string>& strs) {                            // Function that returns the longest common prefix
+        /*                                                                       // Start general steps comment
+            STEPS                                                                // General plan
+            1. Use the first string as the reference string.                      // Step 1 overview
+            2. Check each character position across all strings.                  // Step 2 overview
+            3. If a string ends or a mismatch appears, return the prefix so far.   // Step 3 overview
+            4. If every character in the first string matches, return it.          // Step 4 overview
+        */                                                                       // End general steps comment
+
+        if (strs.empty()) {                                                       // 1. Defensive check, although LeetCode says strs.length >= 1
+            return "";                                                           // 1. Reaching here means there are no strings, so no prefix exists
+        }                                                                        // 1. Reaching here means strs has at least one string
+
+        const string& firstWord = strs[0];                                        // 1. Use the first word as the reference prefix candidate
+        int numWords = static_cast<int>(strs.size());                             // 1. Store the number of strings as an int
+        int firstLen = static_cast<int>(firstWord.size());                        // 1. Store the length of the first word as an int
+
+        for (int charIdx = 0; charIdx < firstLen; ++charIdx) {                    // 2. Check one character position at a time
+            char targetChar = firstWord[charIdx];                                 // 2. This is the character every other string must match
+
+            for (int wordIdx = 1; wordIdx < numWords; ++wordIdx) {                // 2. Compare this character position against every other string
+                int currWordLen = static_cast<int>(strs[wordIdx].size());         // 2. Store the current word's length
+
+                if (charIdx >= currWordLen) {                                     // 3. Check if the current string ended before this character index
+                    return firstWord.substr(0, charIdx);                          // 3. Reaching here means the common prefix cannot go past this string
+                }                                                                // 3. Reaching here means this string has a character at charIdx
+
+                if (strs[wordIdx][charIdx] != targetChar) {                       // 3. Check if this string's character differs from the reference character
+                    return firstWord.substr(0, charIdx);                          // 3. Reaching here means mismatch found, so return prefix before charIdx
+                }                                                                // 3. Reaching here means this string matched at charIdx
+            }                                                                    // 2. Reaching here means every string matched at this charIdx
+        }                                                                        // 4. Reaching here means every character of firstWord matched all strings
+
+        return firstWord;                                                         // 4. Reaching here means the entire firstWord is the common prefix
+    }                                                                            // End longestCommonPrefix function
+};                                                                               // End Solution class
